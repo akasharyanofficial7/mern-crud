@@ -22,6 +22,8 @@ export default function AddUser() {
       .post("http://localhost:3001/api/create", user)
       .then((res) => {
         console.log(res);
+
+        setUser(users);
       })
       .catch((error) => {
         console.log(error.message);
@@ -42,6 +44,7 @@ export default function AddUser() {
             id="name"
             placeholder="Enter your name"
             onChange={inputHandler}
+            value={user.name}
             name="name"
           />
         </div>
@@ -56,6 +59,7 @@ export default function AddUser() {
             placeholder="Enter your email"
             onChange={inputHandler}
             name="email"
+            value={user.email}
           />
         </div>
         <div className="mb-3">
@@ -66,6 +70,7 @@ export default function AddUser() {
             type="password"
             className="form-control"
             id="password"
+            value={user.password}
             placeholder="Enter your password"
             onChange={inputHandler}
             name="password"

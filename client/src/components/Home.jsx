@@ -1,6 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
+import axios from "axios";
 export default function Home() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios.get("http://localhost:3001/api/getall");
+
+      setData(res.data);
+    };
+
+    fetchData();
+  }, []);
   return (
     <>
       <div className="container mt-5">
@@ -22,21 +35,25 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Alice Mayer</td>
-              <td>alice@example.com</td>
-              <td>
-                <button className="btn btn-success btn-sm">
-                  <Link
-                    to="/update"
-                    className="text-white text-decoration-none"
-                  >
-                    Update
-                  </Link>
-                </button>
-                <button className="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
+            {data.map((val, index) => {
+              return (
+                <tr key={index}>
+                  <td>{val.name}</td>
+                  <td>{val.email}</td>
+                  <td>
+                    <button className="btn btn-success btn-sm">
+                      <Link
+                        to="/update"
+                        className="text-white text-decoration-none"
+                      >
+                        Update
+                      </Link>
+                    </button>
+                    <button className="btn btn-danger btn-sm">Delete</button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
