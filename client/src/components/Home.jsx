@@ -43,7 +43,7 @@ export default function Home() {
                   <td>
                     <button className="btn btn-success btn-sm">
                       <Link
-                        to="/update"
+                        to={`/update/` + val._id}
                         className="text-white text-decoration-none"
                       >
                         Update

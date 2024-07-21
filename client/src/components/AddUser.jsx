@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 export default function AddUser() {
   const users = {
     name: "",
@@ -9,6 +10,7 @@ export default function AddUser() {
   };
   const [user, setUser] = useState(users);
 
+  const navigate = useNavigate();
   const inputHandler = (e) => {
     const { id, value } = e.target;
     setUser({ ...user, [id]: value });
@@ -22,8 +24,9 @@ export default function AddUser() {
       .post("http://localhost:3001/api/create", user)
       .then((res) => {
         console.log(res);
-
         setUser(users);
+
+        navigate("/");
       })
       .catch((error) => {
         console.log(error.message);

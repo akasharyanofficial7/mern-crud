@@ -1,11 +1,58 @@
-import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css"; // Ensure Bootstrap is imported
+import React, { useEffect, useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function UpdateUser() {
+  const users = { name: "", email: "", password: "" };
+
+  const { id } = useParams();
+  const [user, setUser] = useState(users);
+
+  const navigate = useNavigate();
+
+  const inputHandle = (e) => {
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await axios
+        .get(`http://localhost:3001/api/getone/${id}`)
+        .then((res) => {
+          console.log(res.data);
+          setUser(res.data);
+        })
+        .catch((error) => {
+          console.log("We got an error");
+        });
+    };
+
+    fetchData();
+  }, [id]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const updatedData = await axios.put(
+        `http://localhost:3001/api/update/${id}`,
+        user
+      );
+
+      setUser(users);
+
+      navigate("/");
+    } catch (error) {
+      console.log("We found an error while updating");
+    }
+  };
+
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">Update User</h2>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Name
@@ -14,8 +61,10 @@ export default function UpdateUser() {
             type="text"
             className="form-control"
             id="name"
+            name="name"
+            onChange={inputHandle}
             placeholder="Enter your name"
-            defaultValue="John Doe" // You can set a default value here if needed
+            value={user.name}
           />
         </div>
         <div className="mb-3">
@@ -26,8 +75,10 @@ export default function UpdateUser() {
             type="email"
             className="form-control"
             id="email"
+            name="email"
             placeholder="Enter your email"
-            defaultValue="john.doe@example.com" // You can set a default value here if needed
+            onChange={inputHandle}
+            value={user.email}
           />
         </div>
         <div className="mb-3">
@@ -38,7 +89,10 @@ export default function UpdateUser() {
             type="password"
             className="form-control"
             id="password"
+            name="password"
             placeholder="Enter your new password"
+            onChange={inputHandle}
+            value={user.password}
           />
         </div>
         <button type="submit" className="btn btn-primary">
