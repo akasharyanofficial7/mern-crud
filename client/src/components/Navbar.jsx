@@ -28,11 +28,7 @@ const Navbar = () => {
               Add
             </Link>
           </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/edit">
-              Edit
-            </Link>
-          </li>
+
           <li className="nav-item">
             <Link className="nav-link" to="/update">
               Update
